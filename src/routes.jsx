@@ -10,7 +10,7 @@ import 'styles/index.scss';
 
 const Routes = () => (
   <Router>
-    <div>
+    <div className='fill'>
       <Route exact path="/" component={App}/>
       <Route path="/about" component={About}/>
       <Route path="/sample" component={Sample}/>

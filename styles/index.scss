@@ -3,3 +3,219 @@
 @import 'main';
 @import 'common/button';
 
+@mixin phone {
+  @media (max-width: 768px){
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+#app {
+ display: flex;
+ width:60%;
+ height:90%;
+ border: solid 2px white;
+ color: white;
+ font-size: 2.3em;
+ text-align: center;
+  @include phone {
+        width: 100%;
+        height: 100%;
+        font-size: 1em;
+  }
+  @include tablet {
+        width: 90%;
+        height: 90%;
+        font-size: 1.2em;
+  }
+}
+
+
+.h1 {
+ font-size: 3em;
+  @include phone {
+        font-size: 2em;
+  }
+  @include tablet {
+        font-size: 2em;
+  }
+}
+
+.audioElement {
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin: 5px;
+  text-align:center;
+  box-sizing: border-box;
+  border-radius: 50%;
+  display: float;
+  background-color: #4D4F7D;
+  @include phone {
+        width: 50px;
+        height: 50px;
+  }
+}
+
+.ae-enter {
+  opacity: 0.01;
+  width: 0px;
+  height: 0px;
+  margin: 50px;
+  margin-left: 150px;
+  @include phone {
+        height: 25px;
+        margin: 25px;
+        margin-left: 75px;
+  }
+}
+
+.ae-enter.ae-enter-active {
+  opacity: 1;
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+  margin-left: 5px;
+  transition: 700ms;
+  @include phone {
+        width: 50px;
+        height: 50px;
+  }
+}
+
+.ae-leave {
+  opacity: 1;
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+  margin-left: 5px;
+  @include phone {
+        width: 50px;
+        height: 50px;
+  }
+}
+
+.ae-leave.ae-leave-active {
+  opacity: 0.01;
+  width: 0px;
+  height: 0px;
+  margin: 50px;
+  margin-left: -50px;
+  transition: 700ms;
+  @include phone {
+        margin: 25px;
+        margin-left: -25px;
+  }
+}
+
+.fill {
+    width: 100%;
+    height: 100%;
+}
+
+.third {
+  width:100%;
+  height: 33.33%;
+  display: block;
+  overflow: hidden;
+}
+
+.two-third {
+  width:100%;
+  height: 66.67%;
+  display: block;
+  overflow: hidden;
+}
+
+.half {
+  width:100%;
+  height: 50%;
+  display: flex;
+  overflow: hidden;
+  justify-content: centered;
+  align-items: center;
+}
+
+.three-quarters {
+    margin: 20%;
+    width:60%;
+    height: 60%;
+    color: #4D4F7D;
+    font-size: 15px;
+    @include phone {
+        font-size: 8px;
+    }
+}
+
+.vert-third {
+    font-size: 100px;
+    width: 33%;
+    height: 100%;
+    float: left;
+    color: white;
+    @include phone {
+        font-size: 50px;
+    }
+}
+
+.vert-rest {
+    width: 66%;
+    height: 100%;
+    float:left;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ae-container {
+    height: 110px;
+    width: 100%;
+    overflow: hidden;
+    @include phone{
+      height: 55px;
+    }
+}
+
+.flashgreen {
+    -webkit-animation: flashgreen 0.2s linear 1 forwards;
+    animation: flashgreen 0.2s linear 1 forwards;
+}
+
+@-webkit-keyframes flashgreen {
+  0% { background-color: #000000; }
+  50% { background-color: green; }
+  100% { background-color: #000445; }
+}
+
+@keyframes flashgreen {
+  0% { background-color: #000000; }
+  50% { background-color: green; }
+  100% { background-color: #000445; }
+}
+
+.flashred {
+    -webkit-animation: flashred 0.2s linear 1 forwards;
+    animation: flashred 0.2s linear 1 forwards;
+}
+
+@-webkit-keyframes flashred {
+  0% { background-color: #000000; }
+  50% { background-color: red; }
+  100% { background-color: #000445; }
+}
+@keyframes flashred {
+  0% { background-color: #000000; }
+  50% { background-color: red; }
+  100% { background-color: #000445; }
+}

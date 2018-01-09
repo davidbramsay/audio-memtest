@@ -1,3 +1,23 @@
+//@import 'media';
+
+@mixin phone {
+  @media (max-width: 768px){
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
 body {
   background: #ece7e7;
 }
@@ -5,4 +25,87 @@ body {
 .small-img {
   display: block;
   width: 25%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+   font-weight: 300;
+   color: #4D4F7D;
+}
+
+a {
+  color: #4D4F7D;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #A8A9D1;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000445;
+}
+
+.help {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.letters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.colophon {
+  font-size: 14px;
+}
+
+.colophon a {
+  font-size: 14px;
+  margin-right: 0.5em;
+}
+
+.letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  margin: 5px;
+  height: 50px;
+  width: 50px;
+
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
+
+  background: #4D4F7D;
+  border-radius: 50px;
+
+  color: #fff;
+
+}
+
+
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

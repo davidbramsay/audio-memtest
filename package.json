@@ -18,10 +18,20 @@
   "license": "MIT",
   "homepage": "https://github.com/ReactJSResources/react-webpack-babel#readme",
   "dependencies": {
+    "ajv": "^6.0.0",
+    "body-parser": "^1.18.2",
+    "compass-mixins": "^0.12.10",
+    "express": "^4.16.2",
+    "fs": "0.0.1-security",
+    "mongodb": "^3.0.1",
+    "mongoose": "^4.13.9",
     "node-sass": "^4.7.2",
     "normalize.css": "^7.0.0",
+    "rc-progress": "^2.2.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-motion": "^0.5.2",
+    "react-transition-group": "^1.2.1",
     "sass-loader": "^6.0.6"
   },
   "devDependencies": {
