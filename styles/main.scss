@@ -109,3 +109,19 @@ a:hover {
   align-items: center;
   justify-content: center;
 }
+
+.button {
+    background-color: #4D4F7D;
+    border: 2px solid white;
+    border-radius: 5px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+}
+
+.button:hover {
+    background-color: #4d4f54;
+}

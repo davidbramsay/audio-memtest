@@ -43,5 +43,9 @@ module.exports = [
     test: /\.png/,
     exclude: /(node_modules|bower_components)/,
     loader: "file-loader?limit=10000&mimetype=image/png"
+  },
+  {
+    test: /\.wav/,
+    loader: "file-loader?limit=10000&mimetype=audio/wav"
   }
 ];
