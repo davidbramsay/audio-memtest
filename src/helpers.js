@@ -119,7 +119,7 @@ export function createLevel(target_file, vig_files, fill_files, target_dist, vig
 
 export function createRandomLevel(num_vig, num_fill, target_dist=10, vig_min_dist=2, vig_max_dist=4){
   return new Promise((resolve, reject) => {
-    getAllWaves(['https://keyword.media.mit.edu/shared/natural_sounds/', 'https://keyword.media.mit.edu/shared/ambiguous_sounds/']).done(function(data){
+    getAllWaves(['https://keyword.media.mit.edu/shared/natural_sounds/', 'https://keyword.media.mit.edu/shared/ambiguous_sounds/', 'https://keyword.media.mit.edu/shared/final_morph/']).done(function(data){
         var index = Math.floor( Math.random()*data.length );
         var target_file = data[index];
         data.splice(index, 1);
@@ -141,6 +141,29 @@ export function createRandomLevel(num_vig, num_fill, target_dist=10, vig_min_dis
         resolve(createLevel(target_file, vig_files, fill_files, target_dist, vig_min_dist, vig_max_dist));
     });
   });
+}
+
+export function createLevelFromFiles(data, num_vig, num_fill, target_dist=10, vig_min_dist=2, vig_max_dist=4){
+
+        var index = Math.floor( Math.random()*data.length );
+        var target_file = data[index];
+        data.splice(index, 1);
+
+        var vig_files = [];
+        for (var i=0;i<num_vig;i++){
+            var index = Math.floor( Math.random()*data.length );
+            vig_files.push(data[index]);
+            data.splice(index, 1);
+        }
+
+        var fill_files = [];
+        for (var i=0;i<num_fill;i++){
+            var index = Math.floor( Math.random()*data.length );
+            fill_files.push(data[index]);
+            data.splice(index, 1);
+        }
+
+        return [data, createLevel(target_file, vig_files, fill_files, target_dist, vig_min_dist, vig_max_dist)];
 }
 
 export function makeid(len=32) {

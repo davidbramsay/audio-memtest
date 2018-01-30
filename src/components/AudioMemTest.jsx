@@ -1,10 +1,14 @@
 import React from 'react';
 import 'normalize.css';
 import 'styles/index.scss';
+
 import {Line} from 'rc-progress';
 import {CSSTransitionGroup} from 'react-transition-group';
+
 import * as helpers from 'helpers';
 import {db_uri} from 'db_config';
+
+const TARGET_DISTANCES = [5, 60];
 
 function setGlobalVolume(volume){
     //sadly must be called whenever new audio elements are
@@ -97,8 +101,8 @@ class AudioCascade extends React.Component {
     window.addEventListener("keyup", this.handleKeyPress.bind(this));
 
     //play the first sample
-    document.getElementById('audio-' + this.state.nowPlaying.indexOf(1)).play();
     setGlobalVolume(this.props.volume);
+    document.getElementById('audio-' + this.state.nowPlaying.indexOf(1)).play();
 
   }
 
@@ -236,14 +240,44 @@ class AudioMemTest extends React.Component {
             tLocation: [],
             vLocations: [],
             fLocations: [],
+            remainingFiles: [],
+            showDialog: false,
+            dialogStats: {}
         };
     }
 
     componentDidMount() {
-        let targ_dist = [5, 10, 15, 20, 25, 30];
+        let targ_dist = TARGET_DISTANCES;
+
         const rand_dist = targ_dist[Math.floor(Math.random() * targ_dist.length)];
         const vig_files = Math.floor(rand_dist/3);
         const fill_files = rand_dist-vig_files*2 + 5;
+
+        helpers.getAllWaves(
+            [
+                'https://keyword.media.mit.edu/shared/natural_sounds/',
+                'https://keyword.media.mit.edu/shared/ambiguous_sounds/',
+                'https://keyword.media.mit.edu/shared/final_morph/'
+            ]
+        ).done(function(data){
+
+            let dataToFunc = data.slice();
+            let ret_vals = helpers.createLevelFromFiles(dataToFunc, vig_files, fill_files, rand_dist);
+            this.setState({
+                fileList: ret_vals[1].file_list,
+                guesses: new Array(ret_vals[1].file_list.length).fill(0),
+                tLocation: ret_vals[1].t_location,
+                vLocations: ret_vals[1].v_locations,
+                fLocations: ret_vals[1].f_locations,
+                remainingFiles: ret_vals[0],
+                allFiles: data
+            });
+
+            console.log(this.state);
+
+        }.bind(this));
+
+        /*
         helpers.createRandomLevel(vig_files, fill_files, rand_dist).then((data)=>{
             console.log('-- created level --');
             console.log(data);
@@ -255,6 +289,7 @@ class AudioMemTest extends React.Component {
                 fLocations: data.f_locations
             });
         });
+        */
     }
 
     flashGood() {
@@ -314,11 +349,15 @@ class AudioMemTest extends React.Component {
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.onreadystatechange = function() {//Call a function when the state changes.
             if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-                alert('results saved! you scored: ' + (vcorrect + (tcorrect ? 1 : 0)) + '/' + (vtotal+1) + ' and had ' + incorrect + ' incorrect guesses.');
+                this.setState({
+                    fileList: [],
+                    showDialog: true,
+                    dialogStats: {"vcorrect": vcorrect, "tcorrect": tcorrect, "vtotal": vtotal, "incorrect": incorrect}
+                });
             }else if (xhr.readyState == XMLHttpRequest.DONE) {
-                alert('ERROR: results failed to save. you scored: ' + (vcorrect + (tcorrect ? 1 : 0)) + '/' + (vtotal+1) + ' and had ' + incorrect + ' incorrect guesses.');
+                alert('ERROR: results failed to save!  Please email dramsay@mit.edu and tell him to fix it! You scored: ' + (vcorrect + (tcorrect ? 1 : 0)) + '/' + (vtotal+1) + ' and had ' + incorrect + ' incorrect guesses.');
             }
-        }
+        }.bind(this);
 
         const jsonStr = JSON.stringify({
             "uid": this.props.uid,
@@ -343,6 +382,39 @@ class AudioMemTest extends React.Component {
 
     }
 
+    newGame() {
+        console.log('new game initiated');
+
+        let choices = this.state.remainingFiles.slice();
+
+        let targ_dist = TARGET_DISTANCES;
+        console.log(targ_dist);
+
+        const rand_dist = targ_dist[Math.floor(Math.random() * targ_dist.length)];
+        const vig_files = Math.floor(rand_dist/3);
+        const fill_files = rand_dist-vig_files*2 + 5;
+
+        if ( (2+2*vig_files+fill_files) > choices.length ){
+            console.log('not enough left, re-adding previous sounds');
+            choices = this.state.allFiles.slice();
+        }
+
+        let ret_vals = helpers.createLevelFromFiles(choices, vig_files, fill_files, rand_dist);
+        this.setState({
+            fileList: ret_vals[1].file_list,
+            guesses: new Array(ret_vals[1].file_list.length).fill(0),
+            tLocation: ret_vals[1].t_location,
+            vLocations: ret_vals[1].v_locations,
+            fLocations: ret_vals[1].f_locations,
+            remainingFiles: ret_vals[0],
+            showDialog: false
+        });
+
+        console.log(this.state);
+        console.log(ret_vals[0].length);
+
+    }
+
     render () {
         return (
             <div className='fill' onClick={() => {this.child.handleClick.bind(this.child)();}}>
@@ -354,6 +426,15 @@ class AudioMemTest extends React.Component {
             </div>
                 {this.state.fileList.length ?
                         <AudioCascade ref={instance => {this.child = instance;}} files={this.state.fileList} duration={6} volume={0.5} heardCallback={this.heardIndicated.bind(this)} finishedCallback={this.completeIndicated.bind(this)}/>
+                    :null
+                }
+                {this.state.showDialog ?
+                    <div>
+                    <div>
+                        results saved! you scored {(this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0))} / {(this.state.dialogStats['vtotal']+1)} and had {this.state.dialogStats['incorrect']} incorrect guesses.
+                    </div>
+                    <div className='centered button playbutton' style={{marginRight:'30px', marginTop:'25px'}} onClick={this.newGame.bind(this)}> Next Level! </div>
+                    </div>
                     :null
                 }
         </div>

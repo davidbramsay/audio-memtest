@@ -13,7 +13,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             globalVolume: 0.2,
-            window: 2
+            window: 0
         };
     }
 

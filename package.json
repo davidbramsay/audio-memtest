@@ -29,6 +29,7 @@
     "normalize.css": "^7.0.0",
     "rc-progress": "^2.2.5",
     "react": "^16.2.0",
+    "react-confirm-alert": "^1.0.8",
     "react-cookie": "^2.1.2",
     "react-dom": "^16.2.0",
     "react-motion": "^0.5.2",
