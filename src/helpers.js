@@ -143,7 +143,7 @@ export function createRandomLevel(num_vig, num_fill, target_dist=10, vig_min_dis
   });
 }
 
-export function makeid(len=16) {
+export function makeid(len=32) {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 

@@ -69,7 +69,7 @@ class VolumeSet extends React.Component {
         <audio key='noisesig' id='noisesig' loop autoPlay>
             <source src={noiseFile} type='audio/wav'/>
         </audio>
-        <div className='centered' style={{margin: '5%'}}>
+        <div className='centered' style={{marginTop: '5%'}}>
             <div className='slider' style={{width:'70%'}}>
                 <Slider
                 min={0}
@@ -79,6 +79,11 @@ class VolumeSet extends React.Component {
                 value={value}
                 onChange={this.handleChange.bind(this)}
                 />
+            </div>
+        </div>
+        <div className='centered' style={{marginBottom: '5%'}}>
+            <div>
+            Volume
             </div>
         </div>
         <div className='third'>

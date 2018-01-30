@@ -1,1 +1,1 @@
-export const db_uri = 'http://localhost:8000/memtest';
+export const db_uri = 'https://keyword.media.mit.edu/api/memtest'

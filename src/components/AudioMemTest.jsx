@@ -170,6 +170,17 @@ class AudioCascade extends React.Component {
       }
   }
 
+  handleClick() {
+        let delay = Date.now() - this.state.sampleStart;
+        let index = this.state.nowPlaying.indexOf(1);
+        console.log('click detected');
+        console.log(this.state.nowPlaying);
+        console.log(index);
+        console.log(delay);
+        this.props.heardCallback(index, delay);
+  }
+
+
   printState(){
     for (let i in this.state){
       console.log(this.state[i]);
@@ -334,15 +345,15 @@ class AudioMemTest extends React.Component {
 
     render () {
         return (
-        <div className='fill'>
+            <div className='fill' onClick={() => {this.child.handleClick.bind(this.child)();}}>
             <div className='third'>
                 <h1>
                     Memory Test
                 </h1>
-                    Press the *Space Bar* if you hear a sound you've heard before!  You should see the screen flash when you do.  You'll get a score at the end!
+                    Press the *Space Bar* or Click the Screen if you hear a sound that has repeated!  You should see the screen flash when you do.  Good luck!
             </div>
                 {this.state.fileList.length ?
-                    <AudioCascade files={this.state.fileList} duration={6} volume={0.5} heardCallback={this.heardIndicated.bind(this)} finishedCallback={this.completeIndicated.bind(this)}/>
+                        <AudioCascade ref={instance => {this.child = instance;}} files={this.state.fileList} duration={6} volume={0.5} heardCallback={this.heardIndicated.bind(this)} finishedCallback={this.completeIndicated.bind(this)}/>
                     :null
                 }
         </div>

@@ -18,24 +18,17 @@
   }
 }
 
-body {
-  background: #ece7e7;
-}
-
 .small-img {
   display: block;
   width: 25%;
 }
 
 body {
+  background: #000445;
   padding: 0;
   margin: 0;
-}
-
-body {
-   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-   font-weight: 300;
-   color: #4D4F7D;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
 }
 
 a {
@@ -53,6 +46,10 @@ a:hover {
   justify-content: center;
   align-items: center;
 
+  min-height:650px;
+  @include phone {
+        min-height: 380px;
+  }
   position: absolute;
   top: 0;
   left: 0;
