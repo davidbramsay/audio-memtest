@@ -23,6 +23,7 @@
     "compass-mixins": "^0.12.10",
     "express": "^4.16.2",
     "fs": "0.0.1-security",
+    "jquery": "^3.3.1",
     "mongodb": "^3.0.1",
     "mongoose": "^4.13.9",
     "node-sass": "^4.7.2",
