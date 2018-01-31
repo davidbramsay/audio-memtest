@@ -8,7 +8,7 @@ import {CSSTransitionGroup} from 'react-transition-group';
 import * as helpers from 'helpers';
 import {db_uri} from 'db_config';
 
-const TARGET_DISTANCES = [5, 60];
+const TARGET_DISTANCES = [30, 40, 50, 60];
 
 function setGlobalVolume(volume){
     //sadly must be called whenever new audio elements are
@@ -218,7 +218,7 @@ class AudioCascade extends React.Component {
                 <div>
                 <Line percent={(this.state.nowPlaying.indexOf(1)+1)/(this.props.files.length) * 100} strokeWidth="5" strokeColor='#4D4F7D'/>
                 </div>
-                <div className='centered' style={{fontSize:'2em'}}>
+                <div className='centered' style={{fontSize:'1em'}}>
                     progress: {this.state.nowPlaying.indexOf(1)+1}/{this.props.files.length}
                 </div>
             </div>

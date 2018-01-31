@@ -239,7 +239,7 @@ class HeadphonesTest extends React.Component {
                 <div className='third'>
                     <div style={{height: '60%', width:'60%', margin:'0 auto', marginTop:'20px'}}>
                         <Line percent={(this.state.currentTrial)/(this.props.totalTrials) * 100} strokeWidth="5" strokeColor='#4D4F7D'/> 
-                        <div className='centered' style={{fontSize:'2em', width:'100%'}}>
+                        <div className='centered' style={{fontSize:'1em', width:'100%'}}>
                             progress: {this.state.currentTrial}/{this.props.totalTrials}
                         </div>
                     </div>
