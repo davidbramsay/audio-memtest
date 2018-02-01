@@ -58,11 +58,7 @@ class AudioBox extends React.Component {
                         <img className='centered' key= {'im-' + label + this.props.nowPlaying} width='100%' src={require('/images/playing3.gif')}/> :
                         <img className='centered' key= {'im-' + label + this.props.nowPlaying} width='100%' src={require('/images/playing_still3.png')}/>
                     }
-
                     <br/>
-                    <audio key={this.props.id + 'aud'} id={this.props.id}>
-                        <source src={this.props.src} type='audio/wav'/>
-                    </audio>
                 </div> :
                 ''
             }
@@ -88,12 +84,14 @@ class AudioCascade extends React.Component {
                   nowVisible: nowVisible,
                   sampleStart: Date.now(),
                   audioLoaded: false,
-                  loaded: 0
+                  loaded: 0,
+                  audio: []
 
                  };
 
     this.handleClick = this.handleClick.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.loadedAudio = this.loadedAudio.bind(this);
 
   }
 
@@ -101,42 +99,17 @@ class AudioCascade extends React.Component {
     console.log('mounted cascade!');
 
     //preload audio
-
     this.setState({loaded: 0});
 
-    let loadedAudio = function () {
-        let newload = this.state.loaded + 1;
-        this.setState({loaded: newload});
-
-        console.log('loaded ' + newload);
-
-        if (newload == this.props.files.length){
-            console.log('loaded all! start it!');
-
-            //create timer that supports non-integer seconds
-            this.timerID = setInterval(
-            () => this.tick(),
-            Math.floor(this.props.duration / Math.floor(this.props.duration) * 1000)
-            );
-
-            setTimeout(()=>{window.addEventListener("keyup", this.handleKeyPress)}, 400);
-            setTimeout(()=>{window.addEventListener("click", this.handleClick)}, 400);
-
-            //play the first sample
-            this.setState({ audioLoaded: true });
-
-            setGlobalVolume(this.props.volume);
-            document.getElementById('audio-' + this.state.nowPlaying.indexOf(1)).play();
-
-
-        }
-    }.bind(this)
-
+    let audio = [];
     for (let i in this.props.files){
-        let audio = new Audio();
-        audio.addEventListener('canplaythrough', loadedAudio, false);
-        audio.src = this.props.files[i];
+        audio[i] = new Audio();
+        audio[i].addEventListener('canplaythrough', this.loadedAudio, false);
+        audio[i].src = this.props.files[i];
+        audio[i].volume = this.props.volume;
     }
+
+    this.setState({audio: audio});
 
 
   }
@@ -147,8 +120,35 @@ class AudioCascade extends React.Component {
     clearInterval(this.timerID);
     window.removeEventListener("keyup", this.handleKeyPress);
     window.removeEventListener("click", this.handleClick);
+    for (let i in this.state.audio){
+        this.state.audio[i].removeEventListener('canplaythrough', this.loadedAudio);
+    }
   }
 
+  loadedAudio() {
+
+    let newload = this.state.loaded + 1;
+    this.setState({loaded: newload});
+
+    console.log('loaded ' + newload);
+
+    if (newload == this.props.files.length){
+        console.log('loaded all! start it!');
+
+        //create timer that supports non-integer seconds
+        this.timerID = setInterval(
+        () => this.tick(),
+        Math.floor(this.props.duration / Math.floor(this.props.duration) * 1000)
+        );
+
+        setTimeout(()=>{window.addEventListener("keyup", this.handleKeyPress)}, 400);
+        setTimeout(()=>{window.addEventListener("click", this.handleClick)}, 400);
+
+        //play the first sample
+        this.setState({ audioLoaded: true });
+        this.state.audio[this.state.nowPlaying.indexOf(1)].play();
+    }
+  }
 
   tick() {
     console.log('tick! ' + this.state.count +  '   ' + (Date.now()-this.state.sampleStart));
@@ -195,7 +195,7 @@ class AudioCascade extends React.Component {
                 nowVisible: newVisible}
       });
 
-      document.getElementById('audio-' + newPlaying.indexOf(1)).play();
+      this.state.audio[newPlaying.indexOf(1)].play();
 
     }
 
@@ -237,7 +237,7 @@ class AudioCascade extends React.Component {
 
     const audioList = this.props.files.map((f, i) => {
           return (
-                <AudioBox key={'audio-' + i} id={'audio-' + i} src={f} nowPlaying={this.state.nowPlaying[i]} nowVisible={this.state.nowVisible[i]} />
+                <AudioBox key={'audio-' + i} id={'audio-' + i} src={f} nowPlaying={this.state.nowPlaying[i]} nowVisible={this.state.nowVisible[i]} loadedAudio={this.loadedAudio} />
           );
     });
 
@@ -349,14 +349,14 @@ class AudioMemTest extends React.Component {
         console.log('green flash');
         console.log(this.state.guesses);
         document.getElementsByName('container')[0].classList.add('flashgreen');
-        setTimeout(() => {document.getElementsByName('container')[0].classList.remove('flashgreen')}, 500);
+        setTimeout(() => {document.getElementsByName('container')[0].classList.remove('flashgreen')}, 300);
     }
 
     flashBad() {
         console.log('red flash');
         console.log(this.state.guesses);
         document.getElementsByName('container')[0].classList.add('flashred');
-        setTimeout(() => {document.getElementsByName('container')[0].classList.remove('flashred')}, 500);
+        setTimeout(() => {document.getElementsByName('container')[0].classList.remove('flashred')}, 300);
     }
 
     heardIndicated(index, delay){

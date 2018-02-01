@@ -206,33 +206,42 @@
 
 .flashgreen {
     -webkit-animation: flashgreen 0.2s linear 1 forwards;
+    -moz-animation: flashgreen 0.2s linear 1 forwards;
     animation: flashgreen 0.2s linear 1 forwards;
 }
 
 @-webkit-keyframes flashgreen {
-  0% { background-color: #000000; }
+  50% { background-color: green; }
+  100% { background-color: #000445; }
+}
+
+@-moz-keyframes flashgreen {
   50% { background-color: green; }
   100% { background-color: #000445; }
 }
 
 @keyframes flashgreen {
-  0% { background-color: #000000; }
   50% { background-color: green; }
   100% { background-color: #000445; }
 }
 
 .flashred {
     -webkit-animation: flashred 0.2s linear 1 forwards;
+    -moz-animation: flashred 0.2s linear 1 forwards;
     animation: flashred 0.2s linear 1 forwards;
 }
 
 @-webkit-keyframes flashred {
-  0% { background-color: #000000; }
   50% { background-color: red; }
   100% { background-color: #000445; }
 }
+
+@-moz-keyframes flashred {
+  50% { background-color: red; }
+  100% { background-color: #000445; }
+}
+
 @keyframes flashred {
-  0% { background-color: #000000; }
   50% { background-color: red; }
   100% { background-color: #000445; }
 }
