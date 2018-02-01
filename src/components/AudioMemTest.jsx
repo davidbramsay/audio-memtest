@@ -86,32 +86,72 @@ class AudioCascade extends React.Component {
     this.state = {count: Math.floor(props.duration),
                   nowPlaying: nowPlaying,
                   nowVisible: nowVisible,
-                  sampleStart: Date.now()
+                  sampleStart: Date.now(),
+                  audioLoaded: false,
+                  loaded: 0
+
                  };
+
+    this.handleClick = this.handleClick.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
 
   }
 
   componentDidMount() {
-    //create timer that supports non-integer seconds
-    this.timerID = setInterval(
-      () => this.tick(),
-      Math.floor(this.props.duration / Math.floor(this.props.duration) * 1000)
-    );
+    console.log('mounted cascade!');
 
-    window.addEventListener("keyup", this.handleKeyPress.bind(this));
+    //preload audio
 
-    //play the first sample
-    setGlobalVolume(this.props.volume);
-    document.getElementById('audio-' + this.state.nowPlaying.indexOf(1)).play();
+    this.setState({loaded: 0});
+
+    let loadedAudio = function () {
+        let newload = this.state.loaded + 1;
+        this.setState({loaded: newload});
+
+        console.log('loaded ' + newload);
+
+        if (newload == this.props.files.length){
+            console.log('loaded all! start it!');
+
+            //create timer that supports non-integer seconds
+            this.timerID = setInterval(
+            () => this.tick(),
+            Math.floor(this.props.duration / Math.floor(this.props.duration) * 1000)
+            );
+
+            setTimeout(()=>{window.addEventListener("keyup", this.handleKeyPress)}, 400);
+            setTimeout(()=>{window.addEventListener("click", this.handleClick)}, 400);
+
+            //play the first sample
+            this.setState({ audioLoaded: true });
+
+            setGlobalVolume(this.props.volume);
+            document.getElementById('audio-' + this.state.nowPlaying.indexOf(1)).play();
+
+
+        }
+    }.bind(this)
+
+    for (let i in this.props.files){
+        let audio = new Audio();
+        audio.addEventListener('canplaythrough', loadedAudio, false);
+        audio.src = this.props.files[i];
+    }
+
 
   }
 
   componentWillUnmount() {
+    console.log('Cleared Timer:' + this.timerID);
+    this.setState({ audioLoaded: false });
     clearInterval(this.timerID);
+    window.removeEventListener("keyup", this.handleKeyPress);
+    window.removeEventListener("click", this.handleClick);
   }
 
 
   tick() {
+    console.log('tick! ' + this.state.count +  '   ' + (Date.now()-this.state.sampleStart));
     //if finished a cycle, call timerDone
     if (this.state.count == 0) {
       this.TimerDone();
@@ -142,11 +182,11 @@ class AudioCascade extends React.Component {
       this.printState();
 
       //update nowPlaying and nowVisible
-      let newPlaying = this.state.nowPlaying;
+      let newPlaying = this.state.nowPlaying.slice();
       newPlaying.splice(0,0,0);
       newPlaying.pop();
 
-      let newVisible = this.state.nowVisible;
+      let newVisible = this.state.nowVisible.slice();
       newVisible.splice(0,0,0);
       newVisible.pop();
 
@@ -167,7 +207,7 @@ class AudioCascade extends React.Component {
           let delay = Date.now() - this.state.sampleStart;
           let index = this.state.nowPlaying.indexOf(1);
           console.log('space or enter detected');
-          console.log(this.state.nowPlaying);
+          console.log(this);
           console.log(index);
           console.log(delay);
           this.props.heardCallback(index, delay);
@@ -178,7 +218,7 @@ class AudioCascade extends React.Component {
         let delay = Date.now() - this.state.sampleStart;
         let index = this.state.nowPlaying.indexOf(1);
         console.log('click detected');
-        console.log(this.state.nowPlaying);
+        console.log(this);
         console.log(index);
         console.log(delay);
         this.props.heardCallback(index, delay);
@@ -192,6 +232,8 @@ class AudioCascade extends React.Component {
   }
 
   render() {
+
+    setGlobalVolume(this.props.volume);
 
     const audioList = this.props.files.map((f, i) => {
           return (
@@ -207,9 +249,16 @@ class AudioCascade extends React.Component {
                     {this.state.count}
                 </div>
                 <div className='vert-rest'>
-                    <div className='ae-container'>
-                        {audioList}
-                    </div>
+                    {this.state.audioLoaded ?
+                        <div className='ae-container'>
+                            {audioList}
+                        </div>
+                       :<div style={{display:'table', width:'100%', height:'100%'}}>
+                            <div style={{display:'table-cell', fontSize:'3em',color:'white',textAlign:'left',verticalAlign:'middle'}}>
+                                loading {this.state.loaded}/{this.props.files.length} sounds...
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -244,6 +293,10 @@ class AudioMemTest extends React.Component {
             showDialog: false,
             dialogStats: {}
         };
+
+        this.newGame = this.newGame.bind(this);
+        this.heardIndicated = this.heardIndicated.bind(this);
+        this.completeIndicated = this.completeIndicated.bind(this);
     }
 
     componentDidMount() {
@@ -293,11 +346,15 @@ class AudioMemTest extends React.Component {
     }
 
     flashGood() {
+        console.log('green flash');
+        console.log(this.state.guesses);
         document.getElementsByName('container')[0].classList.add('flashgreen');
         setTimeout(() => {document.getElementsByName('container')[0].classList.remove('flashgreen')}, 500);
     }
 
     flashBad() {
+        console.log('red flash');
+        console.log(this.state.guesses);
         document.getElementsByName('container')[0].classList.add('flashred');
         setTimeout(() => {document.getElementsByName('container')[0].classList.remove('flashred')}, 500);
     }
@@ -308,7 +365,7 @@ class AudioMemTest extends React.Component {
 
         if (!this.state.guesses[index]) {
 
-            let guesses = this.state.guesses;
+            let guesses = this.state.guesses.slice();
             guesses[index] = delay;
             this.setState({
                 guesses: guesses
@@ -410,14 +467,14 @@ class AudioMemTest extends React.Component {
             showDialog: false
         });
 
-        console.log(this.state);
         console.log(ret_vals[0].length);
 
     }
 
     render () {
+        console.log(this.state);
         return (
-            <div className='fill' onClick={() => {this.child.handleClick.bind(this.child)();}}>
+            <div className='fill'>
             <div className='third'>
                 <h1>
                     Memory Test
@@ -425,7 +482,7 @@ class AudioMemTest extends React.Component {
                     Press the *Space Bar* or Click the Screen if you hear a sound that has repeated!  You should see the screen flash when you do.  Good luck!
             </div>
                 {this.state.fileList.length ?
-                        <AudioCascade ref={instance => {this.child = instance;}} files={this.state.fileList} duration={6} volume={0.5} heardCallback={this.heardIndicated.bind(this)} finishedCallback={this.completeIndicated.bind(this)}/>
+                        <AudioCascade files={this.state.fileList} duration={6} volume={this.props.volume} heardCallback={this.heardIndicated} finishedCallback={this.completeIndicated}/>
                     :null
                 }
                 {this.state.showDialog ?
@@ -433,7 +490,7 @@ class AudioMemTest extends React.Component {
                     <div>
                         results saved! you scored {(this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0))} / {(this.state.dialogStats['vtotal']+1)} and had {this.state.dialogStats['incorrect']} incorrect guesses.
                     </div>
-                    <div className='centered button playbutton' style={{marginRight:'30px', marginTop:'25px'}} onClick={this.newGame.bind(this)}> Next Level! </div>
+                    <div className='centered button playbutton' style={{marginRight:'30px', marginTop:'25px'}} onClick={this.newGame}> Next Level! </div>
                     </div>
                     :null
                 }
