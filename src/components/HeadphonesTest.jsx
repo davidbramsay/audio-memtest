@@ -15,7 +15,7 @@ function setGlobalVolume(volume, cb){
     for (let i=0; i < audio_elems.length; i++) {
         audio_elems[i].volume = volume;
     }
-    cb();
+    setTimeout(cb, 100);
 }
 
 
