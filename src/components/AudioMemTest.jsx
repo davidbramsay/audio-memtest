@@ -349,14 +349,14 @@ class AudioMemTest extends React.Component {
         console.log('green flash');
         console.log(this.state.guesses);
         document.getElementsByName('container')[0].classList.add('flashgreen');
-        setTimeout(() => {document.getElementsByName('container')[0].classList.remove('flashgreen')}, 300);
+        setTimeout(function() {document.getElementsByName('container')[0].classList.remove('flashgreen');}, 300);
     }
 
     flashBad() {
         console.log('red flash');
         console.log(this.state.guesses);
         document.getElementsByName('container')[0].classList.add('flashred');
-        setTimeout(() => {document.getElementsByName('container')[0].classList.remove('flashred')}, 300);
+        setTimeout(function() {document.getElementsByName('container')[0].classList.remove('flashred');}, 300);
     }
 
     heardIndicated(index, delay){

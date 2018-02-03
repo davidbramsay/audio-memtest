@@ -15,6 +15,9 @@ class App extends React.Component {
             globalVolume: 0.2,
             window: 0
         };
+
+    this.testCallback = this.testCallback.bind(this);
+    this.finishedVolumeSet = this.finishedVolumeSet.bind(this);
     }
 
     componentWillMount () {
@@ -56,8 +59,8 @@ class App extends React.Component {
         console.log(this.state);
         return (
             <div className='fill'>
-              {this.state.window == 0 && <VolumeSet finishedCb={this.finishedVolumeSet.bind(this)}/>}
-              {this.state.window == 1 && <HeadphonesTest volume={this.state.globalVolume} finishedCallback={this.testCallback.bind(this)}/>}
+              {this.state.window == 0 && <VolumeSet finishedCb={this.finishedVolumeSet}/>}
+              {this.state.window == 1 && <HeadphonesTest volume={this.state.globalVolume} finishedCallback={this.testCallback}/>}
               {this.state.window == 3 && <AudioMemTest uid={this.state.uid} volume={this.state.globalVolume}/>}
 
               {this.state.window == 2 &&
