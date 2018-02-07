@@ -135,6 +135,8 @@ class AudioCascade extends React.Component {
     if (newload == this.props.files.length){
         console.log('loaded all! start it!');
 
+        setGlobalVolume(this.props.volume);
+
         //create timer that supports non-integer seconds
         this.timerID = setInterval(
         () => this.tick(),
@@ -233,7 +235,6 @@ class AudioCascade extends React.Component {
 
   render() {
 
-    setGlobalVolume(this.props.volume);
 
     const audioList = this.props.files.map((f, i) => {
           return (
