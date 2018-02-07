@@ -481,6 +481,8 @@ class AudioMemTest extends React.Component {
                     Memory Test
                 </h1>
                     Press the *Space Bar* or Click the Screen if you hear a sound that has repeated!  You should see the screen flash when you do.  Good luck!
+                <br/>
+                your user id: {this.props.uid}
             </div>
                 {this.state.fileList.length ?
                         <AudioCascade files={this.state.fileList} duration={6} volume={this.props.volume} heardCallback={this.heardIndicated} finishedCallback={this.completeIndicated}/>
