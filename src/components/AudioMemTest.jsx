@@ -92,6 +92,7 @@ class AudioCascade extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.loadedAudio = this.loadedAudio.bind(this);
+    this.finishedAudioLoad = this.finishedAudioLoad.bind(this);
 
   }
 
@@ -105,11 +106,23 @@ class AudioCascade extends React.Component {
     for (let i in this.props.files){
         audio[i] = new Audio();
         audio[i].addEventListener('canplaythrough', this.loadedAudio, false);
-        audio[i].src = this.props.files[i];
+        audio[i].src = this.props.files[i] + "?cb=" + new Date().getTime();
         audio[i].volume = this.props.volume;
     }
 
-    this.setState({audio: audio});
+    /*
+    this.cachetimeout = setTimeout(function(){
+
+        console.log('load timeout :/');
+        this.finishedAudioLoad();
+
+    }.bind(this), 8000);
+    */
+
+
+    this.setState({ audio: audio });
+
+
 
 
   }
@@ -118,6 +131,10 @@ class AudioCascade extends React.Component {
     console.log('Cleared Timer:' + this.timerID);
     this.setState({ audioLoaded: false });
     clearInterval(this.timerID);
+    /*if (this.cachetimeout) {
+        clearTimeout(this.cachetimeout);
+        this.cachetimeout = null;
+    }*/
     window.removeEventListener("keyup", this.handleKeyPress);
     window.removeEventListener("click", this.handleClick);
     for (let i in this.state.audio){
@@ -125,15 +142,7 @@ class AudioCascade extends React.Component {
     }
   }
 
-  loadedAudio() {
-
-    let newload = this.state.loaded + 1;
-    this.setState({loaded: newload});
-
-    console.log('loaded ' + newload);
-
-    if (newload == this.props.files.length){
-        console.log('loaded all! start it!');
+  finishedAudioLoad() {
 
         setGlobalVolume(this.props.volume);
 
@@ -149,6 +158,23 @@ class AudioCascade extends React.Component {
         //play the first sample
         this.setState({ audioLoaded: true });
         this.state.audio[this.state.nowPlaying.indexOf(1)].play();
+
+  }
+
+  loadedAudio() {
+
+    let newload = this.state.loaded + 1;
+    this.setState({loaded: newload});
+
+    console.log('loaded ' + newload);
+
+    if (newload == this.props.files.length){
+
+        //clearTimeout(this.cachetimeout);
+        //this.cachetimeout = null;
+        console.log('loaded all! start it!');
+        this.finishedAudioLoad();
+
     }
   }
 
@@ -481,8 +507,6 @@ class AudioMemTest extends React.Component {
                     Memory Test
                 </h1>
                     Press the *Space Bar* or Click the Screen if you hear a sound that has repeated!  You should see the screen flash when you do.  Good luck!
-                <br/>
-                your user id: {this.props.uid}
             </div>
                 {this.state.fileList.length ?
                         <AudioCascade files={this.state.fileList} duration={6} volume={this.props.volume} heardCallback={this.heardIndicated} finishedCallback={this.completeIndicated}/>
@@ -492,6 +516,8 @@ class AudioMemTest extends React.Component {
                     <div>
                     <div>
                         results saved! you scored {(this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0))} / {(this.state.dialogStats['vtotal']+1)} and had {this.state.dialogStats['incorrect']} incorrect guesses.
+                        <br/>
+                        Your user id is {this.props.uid}
                     </div>
                     <div className='centered button playbutton' style={{marginRight:'30px', marginTop:'25px'}} onClick={this.newGame}> Next Level! </div>
                     </div>
