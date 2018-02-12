@@ -27,6 +27,7 @@ class VolumeSet extends React.Component {
       value: 0.15
     };
 
+  this.handleChange = this.handleChange.bind(this);
 
   }
   
@@ -77,7 +78,7 @@ class VolumeSet extends React.Component {
                 step={0.01}
                 tooltip={false}
                 value={value}
-                onChange={this.handleChange.bind(this)}
+                onChange={this.handleChange}
                 />
             </div>
         </div>
@@ -88,7 +89,7 @@ class VolumeSet extends React.Component {
         </div>
         <div className='third'>
         <div className='centered' style={{marginBottom: '5%'}}>
-            <div className='button' onClick={this.props.finishedCb.bind(null,this.state.value)}>
+            <div className='button' onClick={this.props.finishedCallback.bind(null,this.state.value)}>
                 Done
             </div>
         </div>

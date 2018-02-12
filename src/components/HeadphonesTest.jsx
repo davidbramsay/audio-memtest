@@ -86,6 +86,8 @@ class IndividualHeadphonesTest extends React.Component {
         nowPlaying: [0,0,0],
         buttonText: 'Play Test '
     };
+
+    this.onButtonClick = this.onButtonClick.bind(this);
   }
 
   onButtonClick() {
@@ -155,7 +157,7 @@ class IndividualHeadphonesTest extends React.Component {
         (this.props.id === this.props.visibleItem &&
         <div>
             <div className='centered'>
-                <div className='button playbutton' style={{marginRight:'30px'}} onClick={this.onButtonClick.bind(this)}>
+                <div className='button playbutton' style={{marginRight:'30px'}} onClick={this.onButtonClick}>
                     {this.state.buttonText} {this.props.id+1}
                 </div>
                 <div className='ae-container'>
@@ -181,6 +183,8 @@ class HeadphonesTest extends React.Component {
         currentTrial: 0,
         correct: 0
     };
+
+    this.trialFinished = this.trialFinished.bind(this);
   }
 
   trialFinished(correct) {
@@ -213,7 +217,7 @@ class HeadphonesTest extends React.Component {
   render () {
     var tests = [];
     for (var i = 0; i < this.props.totalTrials; i++) {
-        tests.push(<IndividualHeadphonesTest key={i} id={i} visibleItem={this.state.currentTrial} volume={this.props.volume} finishedCallback={this.trialFinished.bind(this)} />);
+        tests.push(<IndividualHeadphonesTest key={i} id={i} visibleItem={this.state.currentTrial} volume={this.props.volume} finishedCallback={this.trialFinished} />);
     }
 
     return (

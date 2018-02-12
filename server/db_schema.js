@@ -32,6 +32,7 @@ const userSchema = new Schema({
   church: { type: Number },
   office: { type: Number },
   home: { type: Number },
+  factory: { type: Number },
   kitchen: { type: Number },
   nature: { type: Number },
   cityStreet: { type: Number },

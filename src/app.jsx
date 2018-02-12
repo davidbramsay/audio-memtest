@@ -2,6 +2,7 @@ import React from 'react';
 import AudioMemTest from './components/AudioMemTest';
 import HeadphonesTest from './components/HeadphonesTest';
 import VolumeSet from './components/VolumeSet';
+import UserSurvey from './components/UserSurvey';
 import * as helpers from 'helpers';
 import { withCookies, Cookies } from 'react-cookie';
 import 'normalize.css';
@@ -59,11 +60,12 @@ class App extends React.Component {
         console.log(this.state);
         return (
             <div className='fill'>
-              {this.state.window == 0 && <VolumeSet finishedCb={this.finishedVolumeSet}/>}
-              {this.state.window == 1 && <HeadphonesTest volume={this.state.globalVolume} finishedCallback={this.testCallback}/>}
-              {this.state.window == 3 && <AudioMemTest uid={this.state.uid} volume={this.state.globalVolume}/>}
+              {this.state.window == 0 && <VolumeSet finishedCallback={this.finishedVolumeSet}/>}
+              {this.state.window == 1 && <UserSurvey uid={this.state.uid} finishedCallback={this.testCallback}/>}
+              {this.state.window == 2 && <HeadphonesTest volume={this.state.globalVolume} finishedCallback={this.testCallback}/>}
+              {this.state.window == 4 && <AudioMemTest uid={this.state.uid} volume={this.state.globalVolume}/>}
 
-              {this.state.window == 2 &&
+              {this.state.window == 3 &&
                 <div>
                     <div className='third' style={{fontSize:'1.5em',marginBottom:'10%'}}>
                         <h1>
