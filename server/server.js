@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const uristring = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 
-  'mongodb://localhost/audio-mem-test';
+  'mongodb://localhost/audio-memtest';
 
 const mongoOptions = { db: { safe: true }};
 
