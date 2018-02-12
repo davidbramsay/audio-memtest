@@ -74,7 +74,7 @@ class App extends React.Component {
                         Click below to start the test.  <br/><br/> Sounds will play one after another.  If you hear one that repeats, hit the space bar or click the screen before the counter hits 0!
                         <br/><br/>Your score will be displayed at the end!
                     </div>
-                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 3});}}> start! </div>
+                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 4});}}> start! </div>
                       </div>
               }
 
@@ -84,7 +84,7 @@ class App extends React.Component {
                       <div>
                           <h1>It appears your headphones are not calibrated correctly. </h1>
                           <div className='third' style={{fontSize:'1.5em',marginBottom:'20%'}}>Please re-do the test with a different pair of headphones if you would like to participate in this study.</div>
-                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 0});}}> restart </div>
+                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 2});}}> restart </div>
                       </div>
               }
             </div>

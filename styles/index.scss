@@ -23,12 +23,13 @@
 
 #app {
  display: flex;
- width:90%;
- height:90%;
+ width:95%;
+ height:95%;
  min-height: 650px;
+ overflow: hidden;
  border: solid 2px white;
  color: white;
- font-size: 1.5em;
+ font-size: 1.2em;
  text-align: center;
   @include phone {
         width: 100%;
@@ -51,6 +52,16 @@
   }
   @include tablet {
         font-size: 2.6em;
+  }
+}
+
+.h2 {
+ font-size: 1.8em;
+  @include phone {
+        font-size: 1.8em;
+  }
+  @include tablet {
+        font-size: 1.8em;
   }
 }
 
@@ -122,8 +133,10 @@
 }
 
 .fill {
-    width: 100%;
+    width:100%;
     height: 100%;
+    min-height: inherit;
+    display:inline-block;
 }
 
 .third {
@@ -131,6 +144,31 @@
   height: 33.33%;
   display: block;
   overflow: hidden;
+  justify-content: centered;
+  align-items: center;
+  @include phone {
+      font-size: 8px;
+  }
+}
+
+.quarter {
+  width:100%;
+  height: 12%;
+  display: block;
+  overflow: hidden;
+  text-align: center;
+  justify-content: centered;
+  align-items: center;
+  @include phone {
+      font-size: 8px;
+  }
+}
+.quarter-rest {
+  width:100%;
+  height: 88%;
+  display: block;
+  overflow: hidden;
+  text-align: center;
   justify-content: centered;
   align-items: center;
   @include phone {
@@ -153,7 +191,6 @@
 }
 
 .half {
-  width:100%;
   height: 50%;
   display: block;
   overflow: hidden;
@@ -266,3 +303,60 @@
         min-width: 100px;
   }
 }
+
+
+
+.selectable-section{
+    width:100%;
+    justify-content: centered;
+    align-items: center;
+}
+
+.selectable-wrapper{
+    width:100%;
+    justify-content: centered;
+    align-items: center;
+}
+
+.selectable-wrap{
+    min-height:20px;
+    font-size: .9em;    
+    display:inline-block;
+    margin-top: 3px;
+    padding: 2px;
+
+}
+
+.selectable-description{
+ display:table-cell;
+ font-style:italic;
+ text-align:right;
+ min-width: 260px;
+ padding-left: 5px;
+ padding-right: 5px;
+    @include phone {
+        min-width:110px;
+    }
+}
+
+.selectable-option{
+ display:table-cell;
+ border: solid 1px grey;
+ border-radius: 5px;
+ padding-left: 5px;
+ padding-right: 5px;
+ border-spacing: 5px;
+    @include phone {
+        border-radius:1px;
+        padding-left: 2px;
+        padding-right: 2px;
+        border-spacing: 2px;
+    }
+
+}
+
+.selectable-option:hover{
+    background-color: #4D4FFF;
+
+}
+
