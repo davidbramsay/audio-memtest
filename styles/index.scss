@@ -352,6 +352,9 @@
         padding-right: 2px;
         border-spacing: 2px;
     }
+    @include tablet {
+        font-size: .6em;
+    }
 
 }
 

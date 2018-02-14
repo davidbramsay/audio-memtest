@@ -8,7 +8,7 @@ import {CSSTransitionGroup} from 'react-transition-group';
 import * as helpers from 'helpers';
 import {db_uri} from 'db_config';
 
-const TARGET_DISTANCES = [30, 40, 50, 60];
+const TARGET_DISTANCES = [60];
 
 function setGlobalVolume(volume){
     //sadly must be called whenever new audio elements are
@@ -476,7 +476,7 @@ class AudioMemTest extends React.Component {
 
         const rand_dist = targ_dist[Math.floor(Math.random() * targ_dist.length)];
         const vig_files = Math.floor(rand_dist/3);
-        const fill_files = rand_dist-vig_files*2 + 5;
+        const fill_files = rand_dist-vig_files*2;
 
         if ( (2+2*vig_files+fill_files) > choices.length ){
             console.log('not enough left, re-adding previous sounds');

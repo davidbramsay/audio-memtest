@@ -105,30 +105,27 @@ class UserSurvey extends React.Component {
         </div>
         <div className='quarter-rest' style={{minHeight:'650px'}}>
             <div style={{float:'left', marginTop:'7px', textAlign:'left', marginLeft:'25px', width:'100%'}}>
-            How many *waking* hours do you spend in these places on a typical day?
-            </div>
-            <div style={{float:'left', marginLeft:'25px', border:'none', textAlign:'left', fontStyle:'italic',fontSize:'0.7em',width:'100%'}}>
-            (If you visit somewhere once a week for less than 6 hours, that's 0-1.  If you're there for a full day once a week, put 1-2.)
+            Which option most closely describes the typical amount of *waking* time you spend in these locations?
             </div>
             <div className='selectable-section'>
-            <Selectable title='car or truck' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.car} callback={(newval)=>{this.updateState({car: newval});}} />
-            <Selectable title='office' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.office} callback={(newval)=>{this.updateState({office: newval});}} />
-            <Selectable title='school' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.school} callback={(newval)=>{this.updateState({school: newval});}} />
-            <Selectable title='church' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.church} callback={(newval)=>{this.updateState({church: newval});}} />
-            <Selectable title='factory' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.factory} callback={(newval)=>{this.updateState({factory: newval});}} />
-            <Selectable title='secluded nature' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.nature} callback={(newval)=>{this.updateState({nature: newval});}} />
-            <Selectable title='outside in a public park or city street' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.street} callback={(newval)=>{this.updateState({street: newval});}} />
-            <Selectable title='restaurant or bar/club' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.bar} callback={(newval)=>{this.updateState({bar: newval});}} />
-            <Selectable title='retail or grocery store' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.shopping} callback={(newval)=>{this.updateState({shopping: newval});}} />
-            <Selectable title='home' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.home} callback={(newval)=>{this.updateState({home: newval});}} />
-            <Selectable title='kitchen' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.kitchen} callback={(newval)=>{this.updateState({kitchen: newval});}} />
+            <Selectable title='car or truck' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.car} callback={(newval)=>{this.updateState({car: newval});}} />
+            <Selectable title='office' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.office} callback={(newval)=>{this.updateState({office: newval});}} />
+            <Selectable title='school' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.school} callback={(newval)=>{this.updateState({school: newval});}} />
+            <Selectable title='church' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.church} callback={(newval)=>{this.updateState({church: newval});}} />
+            <Selectable title='factory' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.factory} callback={(newval)=>{this.updateState({factory: newval});}} />
+            <Selectable title='secluded nature' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.nature} callback={(newval)=>{this.updateState({nature: newval});}} />
+            <Selectable title='outside in a public park or city street' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.street} callback={(newval)=>{this.updateState({street: newval});}} />
+            <Selectable title='restaurant or bar/club' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.bar} callback={(newval)=>{this.updateState({bar: newval});}} />
+            <Selectable title='retail or grocery store' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.shopping} callback={(newval)=>{this.updateState({shopping: newval});}} />
+            <Selectable title='home' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.home} callback={(newval)=>{this.updateState({home: newval});}} />
+            <Selectable title='kitchen' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.kitchen} callback={(newval)=>{this.updateState({kitchen: newval});}} />
             </div>
             <div style={{float:'left', marginTop:'7px', marginLeft:'25px', textAlign:'left', width:'100%'}}>
-            How many hours do you spend on these activities on a typical day?
+            Which option most closely describes the typical amount of *waking* time you spend doing these activities?
             </div>
             <div className='selectable-section'>
-            <Selectable title='watching video content (tv, internet)' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.tv} callback={(newval)=>{this.updateState({tv: newval});}} />
-            <Selectable title='listening to music' options={['0','0-1','1-2','2-4','4-6','6-8','more than 8']} selected={this.state.music} callback={(newval)=>{this.updateState({music: newval});}} />
+            <Selectable title='watching video content (tv, internet)' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.tv} callback={(newval)=>{this.updateState({tv: newval});}} />
+            <Selectable title='listening to music' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.music} callback={(newval)=>{this.updateState({music: newval});}} />
             </div>
             <div className='selectable-section'>
             <Selectable title='you live in an ' options={['urban city', 'suburban neighborhood', 'rural landscape']} selected={this.state.urban} callback={(newval)=>{this.updateState({urban: newval});}} />
