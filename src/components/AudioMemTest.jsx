@@ -476,7 +476,7 @@ class AudioMemTest extends React.Component {
 
         const rand_dist = targ_dist[Math.floor(Math.random() * targ_dist.length)];
         const vig_files = Math.floor(rand_dist/3);
-        const fill_files = rand_dist-vig_files*2;
+        const fill_files = rand_dist-vig_files*2 + 5;
 
         if ( (2+2*vig_files+fill_files) > choices.length ){
             console.log('not enough left, re-adding previous sounds');
@@ -515,9 +515,9 @@ class AudioMemTest extends React.Component {
                 {this.state.showDialog ?
                     <div>
                     <div>
-                        results saved! you scored {(this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0))} / {(this.state.dialogStats['vtotal']+1)} and had {this.state.dialogStats['incorrect']} incorrect guesses.
-                        <br/>
-                        Your user id is {this.props.uid}
+                        Results saved! You got {(this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0))} / {(this.state.dialogStats['vtotal']+1)} and had {this.state.dialogStats['incorrect']} incorrect guesses.
+                        that's worth  { ((((this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0)))  - this.state.dialogStats['incorrect']) > 0 ) ?
+                                         2 * (((this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0)))  - this.state.dialogStats['incorrect']) : 0 } raffle tickets!
                     </div>
                     <div className='centered button playbutton' style={{marginRight:'30px', marginTop:'25px'}} onClick={this.newGame}> Next Level! </div>
                     </div>

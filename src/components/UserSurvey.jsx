@@ -50,10 +50,12 @@ class UserSurvey extends React.Component {
         street: 0,
         shopping: 0,
         tv: 0,
-        music: 0
+        music: 0,
+        email: ""
     };
 
     this.finished = this.finished.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
   }
 
 
@@ -85,12 +87,17 @@ class UserSurvey extends React.Component {
         "cityStreet": this.state.street,
         "shoppingGroceries": this.state.shopping,
         "watchingMedia": this.state.tv,
-        "listeningMusic": this.state.music
+        "listeningMusic": this.state.music,
+        "email": this.state.email
     });
 
     xhr.send(jsonStr);
     console.log(this.state);
 
+  }
+
+  handleTextChange(val) {
+      this.setState({ email: val});
   }
 
   updateState(obj){
@@ -103,7 +110,7 @@ class UserSurvey extends React.Component {
         <div className='quarter' style={{width:'100%'}}>
             <h2> A short survey to understand what you hear in your life. </h2>
         </div>
-        <div className='quarter-rest' style={{minHeight:'650px'}}>
+        <div className='quarter-rest' style={{minHeight:'750px'}}>
             <div style={{float:'left', marginTop:'7px', textAlign:'left', marginLeft:'25px', width:'100%'}}>
             Which option most closely describes the typical amount of *waking* time you spend in these locations?
             </div>
@@ -127,9 +134,20 @@ class UserSurvey extends React.Component {
             <Selectable title='watching video content (tv, internet)' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.tv} callback={(newval)=>{this.updateState({tv: newval});}} />
             <Selectable title='listening to music' options={['never', 'once a month', 'once a week', 'a little each day','many hours each day']} selected={this.state.music} callback={(newval)=>{this.updateState({music: newval});}} />
             </div>
+            <br/>
             <div className='selectable-section'>
             <Selectable title='you live in an ' options={['urban city', 'suburban neighborhood', 'rural landscape']} selected={this.state.urban} callback={(newval)=>{this.updateState({urban: newval});}} />
             </div>
+            <br/>
+            <div className='selectable-section'>
+            optional email address for raffle:
+            <input 
+                    type="text" 
+                    value={this.state.email} 
+                    onChange={(e) => this.handleTextChange(e.target.value)}
+                    placeholder="email address" />
+            </div>
+
             <div className='centered button playbutton' style={{marginRight:'30px', marginTop:'25px', marginBotton:'35px'}} onClick={this.finished}> Continue </div>
 
         </div>
