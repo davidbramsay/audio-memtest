@@ -38,7 +38,9 @@ const userSchema = new Schema({
   cityStreet: { type: Number },
   shoppingGroceries: { type: Number },
   watchingMedia: { type: Number},
-  listeningMusic: { type: Number}
+  listeningMusic: { type: Number},
+
+  email: {type: String}
 
 
 });

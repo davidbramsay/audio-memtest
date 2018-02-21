@@ -70,10 +70,10 @@ class App extends React.Component {
                         We are MIT researchers trying to understand what makes a sound memorable.  By participating in this test, you'll be contributing to that work.  <br/><br/> 
                         You will be entered in a raffle for a <b style={{fontSize:'1.3em'}}>$25 Amazon Giftcard</b> if you provide us your email.  The better your score in the game, the more raffle tickets you'll win. <br/><br/>
                     </div>
-                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 1});}}> start! </div>
+                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 1});}}> Start! </div>
 
                         <div style={{fontSize:'0.7em', marginTop:'5%'}}>
-                            Entering your email is purely optional, it will be stored securely on a password protected server, and it will be deleted immediately upon raffle drawing on March 15, 2018.
+                            Disclaimer:  Entering your email is purely optional, it will be stored securely on a password protected server, and it will be deleted immediately upon raffle drawing on March 15, 2018.
                             Any questions can be directed to 'davidr (at) mit (dot) edu'. Thank you!
                         </div>
                 </div>
@@ -93,7 +93,7 @@ class App extends React.Component {
                         Click below to start the test.  <br/><br/> Sounds will play one after another.  If you hear one that repeats, hit the space bar or click the screen before the counter hits 0!
                         <br/><br/>Your score will be displayed at the end!
                     </div>
-                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 5});}}> start! </div>
+                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 5});}}> Start! </div>
                       </div>
               }
 
@@ -101,7 +101,7 @@ class App extends React.Component {
                       <div>
                           <h1>It appears your headphones are not calibrated correctly. </h1>
                           <div className='third' style={{fontSize:'1.5em',marginBottom:'20%'}}>Please re-do the test with a different pair of headphones if you would like to participate in this study.</div>
-                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 3});}}> restart </div>
+                          <div className='centered button playbutton' style={{marginRight:'30px'}} onClick={() => {this.setState({window: 3});}}> Restart </div>
                       </div>
               }
             </div>
