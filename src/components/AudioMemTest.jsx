@@ -316,9 +316,11 @@ class AudioMemTest extends React.Component {
             tLocation: [],
             vLocations: [],
             fLocations: [],
-            remainingFiles: [],
+            remainingFillFiles: [],
+            remainingTargets: [],
             showDialog: false,
-            dialogStats: {}
+            dialogStats: {},
+            successString: ''
         };
 
         this.newGame = this.newGame.bind(this);
@@ -340,20 +342,32 @@ class AudioMemTest extends React.Component {
                 'https://keyword.media.mit.edu/shared/final_morph/'
             ]
         ).done(function(data){
+            //got all audio files
 
-            let dataToFunc = data.slice();
-            let ret_vals = helpers.createLevelFromFiles(dataToFunc, vig_files, fill_files, rand_dist);
-            this.setState({
-                fileList: ret_vals[1].file_list,
-                guesses: new Array(ret_vals[1].file_list.length).fill(0),
-                tLocation: ret_vals[1].t_location,
-                vLocations: ret_vals[1].v_locations,
-                fLocations: ret_vals[1].f_locations,
-                remainingFiles: ret_vals[0],
-                allFiles: data
-            });
+            helpers.getTargets().done(function(targets){
+                //got targets audio files that have fewers submits
 
-            console.log(this.state);
+                //copy all audio files to new array
+                let dataToFunc = data.slice();
+                //remove the target files from the filler array
+                for (let i in targets){
+                    var index = dataToFunc.indexOf(targets[i]);
+                    if (index !== -1) dataToFunc.splice(index, 1);
+                }
+
+                let ret_vals = helpers.createLevelFromTargetAndFiles(targets[0], dataToFunc, vig_files, fill_files, rand_dist);
+                this.setState({
+                    fileList: ret_vals[1].file_list,
+                    guesses: new Array(ret_vals[1].file_list.length).fill(0),
+                    tLocation: ret_vals[1].t_location,
+                    vLocations: ret_vals[1].v_locations,
+                    fLocations: ret_vals[1].f_locations,
+                    remainingFillFiles: ret_vals[0],
+                    remainingTargets: targets.slice(1),
+                    allFiles: data
+                });
+
+            }.bind(this));
 
         }.bind(this));
 
@@ -433,10 +447,15 @@ class AudioMemTest extends React.Component {
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.onreadystatechange = function() {//Call a function when the state changes.
             if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+
+                if ((vPercent > 0.6) && (falsePositives < 0.4)){
+                    helpers.getSuccessString().done(function(str){ this.setState({"successString": str}); }.bind(this));
+                }
+
                 this.setState({
                     fileList: [],
                     showDialog: true,
-                    dialogStats: {"vcorrect": vcorrect, "tcorrect": tcorrect, "vtotal": vtotal, "incorrect": incorrect}
+                    dialogStats: {"vcorrect": vcorrect, "tcorrect": tcorrect, "vtotal": vtotal, "incorrect": incorrect, "falsePositives": falsePositives, "vPercent": vPercent}
                 });
             }else if (xhr.readyState == XMLHttpRequest.DONE) {
                 alert('ERROR: results failed to save!  Please email dramsay@mit.edu and tell him to fix it! You scored: ' + (vcorrect + (tcorrect ? 1 : 0)) + '/' + (vtotal+1) + ' and had ' + incorrect + ' incorrect guesses.');
@@ -469,28 +488,24 @@ class AudioMemTest extends React.Component {
     newGame() {
         console.log('new game initiated');
 
-        let choices = this.state.remainingFiles.slice();
+        let choices = this.state.remainingFillFiles.slice();
+        let targets = this.state.remainingTargets.slice();
 
         let targ_dist = TARGET_DISTANCES;
-        console.log(targ_dist);
 
         const rand_dist = targ_dist[Math.floor(Math.random() * targ_dist.length)];
         const vig_files = Math.floor(rand_dist/3);
         const fill_files = rand_dist-vig_files*2 + 5;
 
-        if ( (2+2*vig_files+fill_files) > choices.length ){
-            console.log('not enough left, re-adding previous sounds');
-            choices = this.state.allFiles.slice();
-        }
-
-        let ret_vals = helpers.createLevelFromFiles(choices, vig_files, fill_files, rand_dist);
+        let ret_vals = helpers.createLevelFromTargetAndFiles(targets[0], choices, vig_files, fill_files, rand_dist);
         this.setState({
             fileList: ret_vals[1].file_list,
             guesses: new Array(ret_vals[1].file_list.length).fill(0),
             tLocation: ret_vals[1].t_location,
             vLocations: ret_vals[1].v_locations,
             fLocations: ret_vals[1].f_locations,
-            remainingFiles: ret_vals[0],
+            remainingFillFiles: ret_vals[0],
+            remainingTargets: targets.slice(1),
             showDialog: false
         });
 
@@ -514,12 +529,26 @@ class AudioMemTest extends React.Component {
                 }
                 {this.state.showDialog ?
                     <div>
-                    <div>
-                        Results saved! You got {(this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0))} / {(this.state.dialogStats['vtotal']+1)} and had {this.state.dialogStats['incorrect']} incorrect guesses.
-                        that's worth  { ((((this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0)))  - this.state.dialogStats['incorrect']) > 0 ) ?
-                                         2 * (((this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0)))  - this.state.dialogStats['incorrect']) : 0 } raffle tickets!
-                    </div>
-                    <div className='centered button playbutton' style={{marginRight:'30px', marginTop:'25px'}} onClick={this.newGame}> Next Level! </div>
+
+                        <div>
+                            Results saved! You got {(this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0))} / {(this.state.dialogStats['vtotal']+1)} and had {this.state.dialogStats['incorrect']} incorrect guesses.
+
+                            {((this.state.dialogStats['vPercent'] > 0.6) && (this.state.dialogStats['falsePositives'] < 0.4)) ?
+                                <div>
+                                Please copy and paste this code into the amazon interface to receive your payment for this test: <br/><br/><b>{this.state.successString}</b><br/><br/>
+                                </div>
+                                : <div>You did not appear to be paying attention enough throughout this test to earn your reward, you need to be correct more than half of the time.</div>
+                            }
+                        </div>
+
+                        {this.state.remainingTargets.length ?
+                            <div>
+                                <div> Please make sure to check out another hit in the turk interface *before* hitting this button! </div>
+                                <div className='centered button playbutton' style={{marginRight:'30px', marginTop:'25px'}} onClick={this.newGame}> Next Level! </div>
+                            </div>
+                            : <div>You have completed all the possible tests, thanks!</div>
+                        }
+
                     </div>
                     :null
                 }

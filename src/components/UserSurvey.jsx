@@ -51,7 +51,7 @@ class UserSurvey extends React.Component {
         shopping: 0,
         tv: 0,
         music: 0,
-        email: ""
+        email: "mturker"
     };
 
     this.finished = this.finished.bind(this);
@@ -139,14 +139,6 @@ class UserSurvey extends React.Component {
             <Selectable title='you live in an ' options={['urban city', 'suburban neighborhood', 'rural landscape']} selected={this.state.urban} callback={(newval)=>{this.updateState({urban: newval});}} />
             </div>
             <br/>
-            <div className='selectable-section'>
-            optional email address for raffle:
-            <input 
-                    type="text" 
-                    value={this.state.email} 
-                    onChange={(e) => this.handleTextChange(e.target.value)}
-                    placeholder="email address" />
-            </div>
 
             <div className='centered button playbutton' style={{marginRight:'30px', marginTop:'25px', marginBotton:'35px'}} onClick={this.finished}> Continue </div>
 

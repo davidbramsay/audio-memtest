@@ -30,6 +30,57 @@ export function getWaves(folder) {
     return d.promise();
 }
 
+export function getTargets() {
+    // return an array of the wav files that should be used as targets
+    // call like:
+    // getTargets().done(function(d){d.forEach(e){console.log(e);}});
+
+    var d = $.Deferred();
+
+    $.ajax({
+        //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+        url: '../api/memtest-target',
+        success: function (data) {
+            let result = [];
+            for (let i in data){
+                result.push(data[i][0]);
+            }
+
+            d.resolve(result);
+        },
+        error: function (xhr, s, e){
+            console.log(e);
+            d.reject(e);
+
+        }
+    });
+
+    return d.promise();
+}
+
+export function getSuccessString() {
+    // return a string that is unique for successful completion
+    // call like:
+    // getSuccessString().done(function(d){d.forEach(e){console.log(e);}});
+
+    var d = $.Deferred();
+
+    $.ajax({
+        //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+        url: '../api/memtest-mt-identifier',
+        success: function (data) {
+            d.resolve(data);
+        },
+        error: function (xhr, s, e){
+            console.log(e);
+            d.reject(e);
+
+        }
+    });
+
+    return d.promise();
+}
+
 
 export function getAllWaves(folders) {
     // get an array of locations for sounds the folders array passed
@@ -164,6 +215,25 @@ export function createLevelFromFiles(data, num_vig, num_fill, target_dist=10, vi
         }
 
         return [data, createLevel(target_file, vig_files, fill_files, target_dist, vig_min_dist, vig_max_dist)];
+}
+
+export function createLevelFromTargetAndFiles(target, data, num_vig, num_fill, target_dist=10, vig_min_dist=2, vig_max_dist=4){
+
+        var vig_files = [];
+        for (var i=0;i<num_vig;i++){
+            var index = Math.floor( Math.random()*data.length );
+            vig_files.push(data[index]);
+            data.splice(index, 1);
+        }
+
+        var fill_files = [];
+        for (var i=0;i<num_fill;i++){
+            var index = Math.floor( Math.random()*data.length );
+            fill_files.push(data[index]);
+            data.splice(index, 1);
+        }
+
+        return [data, createLevel(target, vig_files, fill_files, target_dist, vig_min_dist, vig_max_dist)];
 }
 
 export function makeid(len=32) {
