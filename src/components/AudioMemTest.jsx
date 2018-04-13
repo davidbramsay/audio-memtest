@@ -9,6 +9,7 @@ import * as helpers from 'helpers';
 import {db_uri} from 'db_config';
 
 const TARGET_DISTANCES = [60];
+const NUM_TARGETS = 3;
 
 function setGlobalVolume(volume){
     //sadly must be called whenever new audio elements are
@@ -333,7 +334,7 @@ class AudioMemTest extends React.Component {
 
         const rand_dist = targ_dist[Math.floor(Math.random() * targ_dist.length)];
         const vig_files = Math.floor(rand_dist/3);
-        const fill_files = rand_dist-vig_files*2 + 5;
+        const fill_files = rand_dist-vig_files*2 + 10;
 
         helpers.getAllWaves(
             [
@@ -355,7 +356,7 @@ class AudioMemTest extends React.Component {
                     if (index !== -1) dataToFunc.splice(index, 1);
                 }
 
-                let ret_vals = helpers.createLevelFromTargetAndFiles(targets[0], dataToFunc, vig_files, fill_files, rand_dist);
+                let ret_vals = helpers.createLevelFromTargetAndFiles(targets.splice(0,NUM_TARGETS), dataToFunc, vig_files, fill_files, rand_dist);
                 this.setState({
                     fileList: ret_vals[1].file_list,
                     guesses: new Array(ret_vals[1].file_list.length).fill(0),
@@ -363,7 +364,7 @@ class AudioMemTest extends React.Component {
                     vLocations: ret_vals[1].v_locations,
                     fLocations: ret_vals[1].f_locations,
                     remainingFillFiles: ret_vals[0],
-                    remainingTargets: targets.slice(1),
+                    remainingTargets: targets.slice(NUM_TARGETS),
                     allFiles: data
                 });
 
@@ -495,9 +496,9 @@ class AudioMemTest extends React.Component {
 
         const rand_dist = targ_dist[Math.floor(Math.random() * targ_dist.length)];
         const vig_files = Math.floor(rand_dist/3);
-        const fill_files = rand_dist-vig_files*2 + 5;
+        const fill_files = rand_dist-vig_files*2 + 10;
 
-        let ret_vals = helpers.createLevelFromTargetAndFiles(targets[0], choices, vig_files, fill_files, rand_dist);
+        let ret_vals = helpers.createLevelFromTargetAndFiles(targets.slice(0,NUM_TARGETS), choices, vig_files, fill_files, rand_dist);
         this.setState({
             fileList: ret_vals[1].file_list,
             guesses: new Array(ret_vals[1].file_list.length).fill(0),
@@ -505,7 +506,7 @@ class AudioMemTest extends React.Component {
             vLocations: ret_vals[1].v_locations,
             fLocations: ret_vals[1].f_locations,
             remainingFillFiles: ret_vals[0],
-            remainingTargets: targets.slice(1),
+            remainingTargets: targets.slice(NUM_TARGETS),
             showDialog: false
         });
 
