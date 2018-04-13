@@ -11,10 +11,10 @@ const gameSchema = new Schema({
   uid: { type: String },
   guesses: [{ type: Number }],
   fileList: [{ type: String, required: true }],
-  tLocation: [{ type: Number }],
+  tLocation: [{ type: Schema.Types.Mixed }],
   vLocations: [[{ type: Number }]],
   fLocations: [{ type: Number }],
-  tCorrect: {type: Boolean},
+  tCorrect: {type: Schema.Types.Mixed},
   vPercent: {type: Number},
   falsePositives: {type: Number}
 

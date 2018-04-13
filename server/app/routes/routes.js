@@ -544,15 +544,33 @@ module.exports = function(app, db) {
                 for (i in games) {
                     //for use with full audio_file list!!
                     if (games[i]['vPercent'] > 0.6 && games[i]['falsePositives'] < 0.4){
-                        let filename = games[i]['fileList'][games[i]['tLocation'][0]];
-                        dict[filename] += 1;
+                        if (typeof(games[i]['tLocation'][0]) == 'number'){ //old version with single target
+                            let filename = games[i]['fileList'][games[i]['tLocation'][0]];
+                            dict[filename] += 1;
+                        } else {//new version with array of targets
+                            for (i2 in games[i]['tLocation']){
+                                let filename = games[i]['fileList'][games[i]['tLocation'][i2][0]];
+                                dict[filename] += 1;
+                            }
+                        }
                     }
 
                     //for use with smaller subset audio_file list
                     /*
-                    let filename = games[i]['fileList'][games[i]['tLocation'][0]];
-                    if (games[i]['vPercent'] > 0.6 && games[i]['falsePositives'] < 0.4 && AUDIO_FILES.includes(filename)){
-                        dict[filename] += 1;
+                    if (games[i]['vPercent'] > 0.6 && games[i]['falsePositives'] < 0.4){
+                        if (typeof(games[i]['tLocation'][0]) == 'number'){ //old version with single target
+                            let filename = games[i]['fileList'][games[i]['tLocation'][0]];
+                            if AUDIO_FILES.includes(filename){
+                                dict[filename] += 1;
+                            }
+                        } else {//new version with array of targets
+                            for (i2 in games[i]['tLocation']){
+                                let filename = games[i]['fileList'][games[i]['tLocation'][i2][0]];
+                                if AUDIO_FILES.includes(filename){
+                                    dict[filename] += 1;
+                                }
+                            }
+                        }
                     }
                     */
 
