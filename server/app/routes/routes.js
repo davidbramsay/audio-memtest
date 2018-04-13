@@ -521,7 +521,7 @@ module.exports = function(app, db) {
         //always select samples with the lowest number of HITS
 
         //for use with full audio_file list!!
-        let NUM_RESPONSE = 8; //max number of tests someone can do without sounds repeating
+        let NUM_RESPONSE = 21; //max number of tests someone can do without sounds repeating
 
         //for use with smaller subset audio_file list
         //let NUM_RESPONSE = 6; //max number of tests someone can do without sounds repeating
@@ -531,7 +531,7 @@ module.exports = function(app, db) {
             dict[AUDIO_FILES[f]] = 0;
         }
 
-        let rev_dict = new Array(25).fill().map(()=>[]);
+        let rev_dict = new Array(400).fill().map(()=>[]); // this number is the number of responses we track, so it will keep things even and only use the samples with the fewest successes up to 400, and then it will treat them all as random
 
         let ret_vals = [];
 
