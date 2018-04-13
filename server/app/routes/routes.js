@@ -1,5 +1,62 @@
 var fs = require('fs');
 
+/*
+//for use with smaller subset audio_file list
+const AUDIO_FILES = [
+"https://keyword.media.mit.edu/shared/natural_sounds//woman_screaming_-9dBA.wav",
+"https://keyword.media.mit.edu/shared/natural_sounds//dogs_-9dBA.wav",
+"https://keyword.media.mit.edu/shared/ambiguous_sounds//circular_saw_-9dBA.wav",
+"https://keyword.media.mit.edu/shared/final_morph//bats_-9dBA.wav",
+"https://keyword.media.mit.edu/shared/final_morph//snoring_fx_final_-9dBA.wav",
+"https://keyword.media.mit.edu/shared/ambiguous_sounds//shower_-9dBA.wav"
+];
+
+const AUDIO_FILES = [
+'https://keyword.media.mit.edu/shared/ambiguous_sounds//valve_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/ambiguous_sounds//subway_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//253492__fx_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//horse_fx_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//plane_crash_fx_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//stapler_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//fire_alarm_fx_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//splash_fx_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/ambiguous_sounds//axe_sharpen_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//glasses_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//turkey_5_20_0.7_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//machine_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//grasshopper_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/ambiguous_sounds//tea_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//337621__fx_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/ambiguous_sounds//motorcycle_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//punch_5_20_0.1_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//coffee_machine_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/ambiguous_sounds//washing_machine_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//faucet_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//pig_30_5_0.7_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//soda_can_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//car_(starting)_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//sweeping_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/ambiguous_sounds//projector_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//knives_fx_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//rattlesnake_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//music_box_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//whistling_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//pouring_soda_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/ambiguous_sounds//(electric)_razor_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//racecar_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//typewriter_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//laughing_(crowd)_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//footsteps_fx_final_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//coins_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//plane_crash_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//man_screaming_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/natural_sounds//firetruck_-9dBA.wav',
+'https://keyword.media.mit.edu/shared/final_morph//donkey_fx_final_-9dBA.wav'
+];
+*/
+
+
+//for use with full audio_file list!!
 const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/natural_sounds//(car)_horn_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//(computer)_mouse_-9dBA.wav",
@@ -13,7 +70,6 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/natural_sounds//airplane_(flyby)_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//airplane_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//announcement_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//arcade_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//arcade_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//baby_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//baby_crying_-9dBA.wav",
@@ -43,7 +99,6 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/natural_sounds//creek_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//cricket_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//crows_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//crunching.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//crunching_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//digging_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//dirt_bike_-9dBA.wav",
@@ -57,12 +112,10 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/natural_sounds//elephant_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//faucet_(drip)_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//faucet_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//feedback.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//feedback_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//fire_alarm_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//firetruck_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//fireworks_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//flute.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//flute_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//footsteps_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//frogs_-9dBA.wav",
@@ -84,36 +137,29 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/natural_sounds//lions_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//machine_gun_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//man_screaming_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//marchingband.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//marchingband2_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//microwave_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//mosquito_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//music_box_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//opera.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//opera_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//organ_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//paper_(tearing)_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//pencil.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//pencil_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//phone_(ring)_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//phone_(vibrating)_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//pig_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//ping_pong.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//ping_pong_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//plane_crash_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//plates_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//police_(cars)_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//popcorn.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//popcorn_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//pouring_soda_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//punch_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//racecar_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//rain_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//rattlesnake_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//roller_coaster.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//roller_coaster_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//rooster_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//school_bell.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//school_bell_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//scissors_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//seals_-9dBA.wav",
@@ -130,12 +176,10 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/natural_sounds//toilet_(flush)_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//traffic_jam_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//train_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//trumpet.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//trumpet_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//turkey_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//typewriter_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//typing_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//violin.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//violin_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//vomit_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//water_-9dBA.wav",
@@ -147,7 +191,6 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/natural_sounds//woman_crying_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//woman_screaming_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//yawn_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/natural_sounds//zipper.wav",
 "https://keyword.media.mit.edu/shared/natural_sounds//zipper_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/ambiguous_sounds//(electric)_razor_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/ambiguous_sounds//(lawn)_sprinkler_-9dBA.wav",
@@ -184,7 +227,6 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/ambiguous_sounds//door_(closing)_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/ambiguous_sounds//door_(opening)_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/ambiguous_sounds//dryer_-9dBA.wav",
-"https://keyword.media.mit.edu/shared/ambiguous_sounds//duct_tape_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/ambiguous_sounds//duct_tape_-9dBA_final.wav",
 "https://keyword.media.mit.edu/shared/ambiguous_sounds//egg_-9dBA.wav",
 "https://keyword.media.mit.edu/shared/ambiguous_sounds//explosion_-9dBA.wav",
@@ -420,7 +462,6 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/final_morph//woodburning_stove_-9dBA.wav"
 ];
 
-
 module.exports = function(app, db) {
 
     app.post('/memtest', (req, res) => {
@@ -479,7 +520,11 @@ module.exports = function(app, db) {
         //
         //always select samples with the lowest number of HITS
 
+        //for use with full audio_file list!!
         let NUM_RESPONSE = 8; //max number of tests someone can do without sounds repeating
+
+        //for use with smaller subset audio_file list
+        //let NUM_RESPONSE = 6; //max number of tests someone can do without sounds repeating
 
         let dict = {};
         for (f in AUDIO_FILES){
@@ -497,10 +542,20 @@ module.exports = function(app, db) {
             } else {
 
                 for (i in games) {
+                    //for use with full audio_file list!!
                     if (games[i]['vPercent'] > 0.6 && games[i]['falsePositives'] < 0.4){
                         let filename = games[i]['fileList'][games[i]['tLocation'][0]];
                         dict[filename] += 1;
                     }
+
+                    //for use with smaller subset audio_file list
+                    /*
+                    let filename = games[i]['fileList'][games[i]['tLocation'][0]];
+                    if (games[i]['vPercent'] > 0.6 && games[i]['falsePositives'] < 0.4 && AUDIO_FILES.includes(filename)){
+                        dict[filename] += 1;
+                    }
+                    */
+
                 }
                 for (i in dict){
 
