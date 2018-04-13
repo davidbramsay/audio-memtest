@@ -104,21 +104,33 @@ export function getAllWaves(folders) {
 }
 
 
-export function createLevel(target_file, vig_files, fill_files, target_dist, vig_min_dist, vig_max_dist) {
+export function createLevel(target_files, vig_files, fill_files, target_dist, vig_min_dist, vig_max_dist) {
 
-    var tot_len = 1 + 2*vig_files.length + fill_files.length;
+    var tot_len = target_files.length*2 + 2*vig_files.length + fill_files.length;
 
 
-    //first pick where target goes
+    //first pick where targets go
+    var t_locations = [];
+
     var max_tar_ind = tot_len - (target_dist);
-    var t_first = Math.floor(Math.random() * max_tar_ind);
-    var t_end = t_first + target_dist;
-    var t_location = [t_first, t_end];
+    var targ_indices = _.range(0,max_tar_ind); //array of indices to choose from for targets
+    var indices = _.range(0,tot_len); //total array of indices to choose from in general
+
+    for (var i = 0; i < target_files.length; i++){
+        var t_first = Math.floor(Math.random() * targ_indices.length);
+        var t_end = t_first + target_dist;
+        targ_indices.splice(t_first, 1);
+
+        indices.splice(indices.indexOf(t_first), 1);
+        indices.splice(indices.indexOf(t_end), 1);
+
+        t_locations.push([t_first, t_end]);
+    }
 
     //then pick where vig tests go
-    var indices = _.range(0,tot_len);
-    indices.splice(indices.indexOf(t_first), 1);
-    indices.splice(indices.indexOf(t_end), 1);
+    console.log('tlocations');
+    console.log(t_locations);
+    console.log('other indices left');
     console.log(indices);
 
     var v_locations = [];
@@ -156,7 +168,11 @@ export function createLevel(target_file, vig_files, fill_files, target_dist, vig
 
 
     var file_list = _.range(tot_len);
-    for (var l in t_location) file_list[t_location[l]] = target_file;
+    for (var l in t_locations) {
+        var t_file = target_files.splice(Math.floor(Math.random() * target_files.length), 1)[0];
+        file_list[t_locations[l][0]] = t_file;
+        file_list[t_locations[l][1]] = t_file;
+    }
     for (var l in f_locations) file_list[f_locations[l]] = fill_files.splice(Math.floor(Math.random() * fill_files.length), 1)[0];
     for (var l in v_locations) {
         var v_file = vig_files.splice(Math.floor(Math.random() * vig_files.length), 1)[0];
@@ -164,7 +180,7 @@ export function createLevel(target_file, vig_files, fill_files, target_dist, vig
         file_list[v_locations[l][1]] = v_file;
     }
 
-    return {t_location, v_locations, f_locations, file_list};
+    return {t_locations, v_locations, f_locations, file_list};
 
 }
 
@@ -217,7 +233,7 @@ export function createLevelFromFiles(data, num_vig, num_fill, target_dist=10, vi
         return [data, createLevel(target_file, vig_files, fill_files, target_dist, vig_min_dist, vig_max_dist)];
 }
 
-export function createLevelFromTargetAndFiles(target, data, num_vig, num_fill, target_dist=10, vig_min_dist=2, vig_max_dist=4){
+export function createLevelFromTargetAndFiles(targets, data, num_vig, num_fill, target_dist=10, vig_min_dist=2, vig_max_dist=4){
 
         var vig_files = [];
         for (var i=0;i<num_vig;i++){
@@ -233,7 +249,7 @@ export function createLevelFromTargetAndFiles(target, data, num_vig, num_fill, t
             data.splice(index, 1);
         }
 
-        return [data, createLevel(target, vig_files, fill_files, target_dist, vig_min_dist, vig_max_dist)];
+        return [data, createLevel(targets, vig_files, fill_files, target_dist, vig_min_dist, vig_max_dist)];
 }
 
 export function makeid(len=32) {

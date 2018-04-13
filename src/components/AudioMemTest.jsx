@@ -314,7 +314,7 @@ class AudioMemTest extends React.Component {
         this.state = {
             guesses: [],
             fileList: [],
-            tLocation: [],
+            tLocations: [],
             vLocations: [],
             fLocations: [],
             remainingFillFiles: [],
@@ -360,7 +360,7 @@ class AudioMemTest extends React.Component {
                 this.setState({
                     fileList: ret_vals[1].file_list,
                     guesses: new Array(ret_vals[1].file_list.length).fill(0),
-                    tLocation: ret_vals[1].t_location,
+                    tLocations: ret_vals[1].t_locations,
                     vLocations: ret_vals[1].v_locations,
                     fLocations: ret_vals[1].f_locations,
                     remainingFillFiles: ret_vals[0],
@@ -424,8 +424,14 @@ class AudioMemTest extends React.Component {
 
     completeIndicated(){
 
-        const tcorrect = (this.state.guesses[this.state.tLocation[1]] ? true : false);
-        let incorrect = (this.state.guesses[this.state.tLocation[0]] ? 1 : 0);
+        let incorrect = 0;
+        let tcorrect = [];
+
+        for (var t in this.state.tLocations){
+            if (this.state.guesses[this.state.tLocations[t][0]]) incorrect += 1;
+            tcorrect.push(this.state.guesses[this.state.tLocations[t][1]] ? true : false);
+        }
+
 
         let vcorrect = 0;
         let vtotal = 0;
@@ -440,7 +446,7 @@ class AudioMemTest extends React.Component {
             if (this.state.guesses[this.state.fLocations[f]]) incorrect += 1;
         }
 
-        const falsePositives = incorrect / (1 + vtotal + this.state.fLocations.length);
+        const falsePositives = incorrect / (NUM_TARGETS + vtotal + this.state.fLocations.length);
         const vPercent = vcorrect / vtotal;
 
         let xhr = new XMLHttpRequest();
@@ -459,7 +465,7 @@ class AudioMemTest extends React.Component {
                     dialogStats: {"vcorrect": vcorrect, "tcorrect": tcorrect, "vtotal": vtotal, "incorrect": incorrect, "falsePositives": falsePositives, "vPercent": vPercent}
                 });
             }else if (xhr.readyState == XMLHttpRequest.DONE) {
-                alert('ERROR: results failed to save!  Please email dramsay@mit.edu and tell him to fix it! You scored: ' + (vcorrect + (tcorrect ? 1 : 0)) + '/' + (vtotal+1) + ' and had ' + incorrect + ' incorrect guesses.');
+                alert('ERROR: results failed to save!  Please email dramsay@mit.edu and tell him to fix it! You scored: ' + (vcorrect + tcorrect.filter(v => v).length) + '/' + (vtotal+NUM_TARGETS) + ' and had ' + incorrect + ' incorrect guesses.');
             }
         }.bind(this);
 
@@ -467,7 +473,7 @@ class AudioMemTest extends React.Component {
             "uid": this.props.uid,
             "guesses": this.state.guesses,
             "fileList": this.state.fileList,
-            "tLocation": this.state.tLocation,
+            "tLocation": this.state.tLocations,
             "vLocations": this.state.vLocations,
             "fLocations": this.state.fLocations,
             "tCorrect": tcorrect,
@@ -502,7 +508,7 @@ class AudioMemTest extends React.Component {
         this.setState({
             fileList: ret_vals[1].file_list,
             guesses: new Array(ret_vals[1].file_list.length).fill(0),
-            tLocation: ret_vals[1].t_location,
+            tLocations: ret_vals[1].t_locations,
             vLocations: ret_vals[1].v_locations,
             fLocations: ret_vals[1].f_locations,
             remainingFillFiles: ret_vals[0],
@@ -532,7 +538,7 @@ class AudioMemTest extends React.Component {
                     <div>
 
                         <div>
-                            Results saved! You got {(this.state.dialogStats['vcorrect'] + (this.state.dialogStats['tcorrect'] ? 1 : 0))} / {(this.state.dialogStats['vtotal']+1)} and had {this.state.dialogStats['incorrect']} incorrect guesses.
+                            Results saved! You got {(this.state.dialogStats['vcorrect'] + this.state.dialogStats['tcorrect'].filter(v=>v).length)} / {(this.state.dialogStats['vtotal']+NUM_TARGETS)} and had {this.state.dialogStats['incorrect']} incorrect guesses.
 
                             {((this.state.dialogStats['vPercent'] > 0.6) && (this.state.dialogStats['falsePositives'] < 0.4)) ?
                                 <div>
