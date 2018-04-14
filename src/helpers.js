@@ -117,9 +117,9 @@ export function createLevel(target_files, vig_files, fill_files, target_dist, vi
     var indices = _.range(0,tot_len); //total array of indices to choose from in general
 
     for (var i = 0; i < target_files.length; i++){
-        var t_first = Math.floor(Math.random() * targ_indices.length);
+        var t_first = targ_indices[Math.floor(Math.random() * targ_indices.length)];
         var t_end = t_first + target_dist;
-        targ_indices.splice(t_first, 1);
+        targ_indices.splice(targ_indices.indexOf(t_first), 1);
 
         indices.splice(indices.indexOf(t_first), 1);
         indices.splice(indices.indexOf(t_end), 1);
