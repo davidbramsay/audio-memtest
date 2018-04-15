@@ -10,7 +10,7 @@ var fs = require('fs');
 //if you've depleted all hits, it will return 'All hits have been
 //accounted for.  If you believe this is an error, contact davidr@mit.edu'
 
-const NUM_HITS = 5000;
+const NUM_HITS = 15000;
 
 
 function makeid(len=32) {

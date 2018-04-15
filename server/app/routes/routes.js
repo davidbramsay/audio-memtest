@@ -462,6 +462,8 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/final_morph//woodburning_stove_-9dBA.wav"
 ];
 
+let global_rev_dict = {};
+
 module.exports = function(app, db) {
 
     app.post('/memtest', (req, res) => {
@@ -521,7 +523,7 @@ module.exports = function(app, db) {
         //always select samples with the lowest number of HITS
 
         //for use with full audio_file list!!
-        let NUM_RESPONSE = 21; //max number of tests someone can do without sounds repeating
+        let NUM_RESPONSE = 28; //max number of tests someone can do without sounds repeating
 
         //for use with smaller subset audio_file list
         //let NUM_RESPONSE = 6; //max number of tests someone can do without sounds repeating
@@ -585,18 +587,19 @@ module.exports = function(app, db) {
 
                 }
 
-                let curr_index = 0;
-                for (i=0; i < NUM_RESPONSE; i++){
-                    while (rev_dict[curr_index].length == 0){
-                        curr_index = curr_index + 1;
-                    }
-                        ret_vals.push(rev_dict[curr_index].splice(Math.random()*rev_dict[curr_index].length, 1));
-                }
-
-                res.send(ret_vals);
+                global_rev_dict = rev_dict;
             }
         });
 
+        let curr_index = 0;
+        for (i=0; i < NUM_RESPONSE; i++){
+            while (global_rev_dict[curr_index].length == 0){
+                curr_index = curr_index + 1;
+            }
+                ret_vals.push(global_rev_dict[curr_index].splice(Math.random()*rev_dict[curr_index].length, 1));
+        }
+
+        res.send(ret_vals);
     });
 
     app.get('/memtest-mt-identifier', (req, res) => {
