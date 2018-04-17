@@ -587,7 +587,7 @@ module.exports = function(app, db) {
 
                 }
 
-                global_rev_dict = rev_dict;
+                global_rev_dict = Object.assign({},rev_dict);
             }
         });
 
@@ -596,7 +596,7 @@ module.exports = function(app, db) {
             while (global_rev_dict[curr_index].length == 0){
                 curr_index = curr_index + 1;
             }
-                ret_vals.push(global_rev_dict[curr_index].splice(Math.random()*rev_dict[curr_index].length, 1));
+                ret_vals.push(global_rev_dict[curr_index].splice(Math.random()*global_rev_dict[curr_index].length, 1));
         }
 
         res.send(ret_vals);
