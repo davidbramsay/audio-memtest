@@ -462,7 +462,8 @@ const AUDIO_FILES = [
 "https://keyword.media.mit.edu/shared/final_morph//woodburning_stove_-9dBA.wav"
 ];
 
-let global_rev_dict = {};
+let least_used_pool = [];
+let processing_flag = false;
 
 module.exports = function(app, db) {
 
@@ -527,79 +528,98 @@ module.exports = function(app, db) {
 
         //for use with smaller subset audio_file list
         //let NUM_RESPONSE = 6; //max number of tests someone can do without sounds repeating
+        if (!processing_flag){
 
-        let dict = {};
-        for (f in AUDIO_FILES){
-            dict[AUDIO_FILES[f]] = 0;
-        }
+            processing_flag = true;
 
-        let rev_dict = new Array(400).fill().map(()=>[]); // this number is the number of responses we track, so it will keep things even and only use the samples with the fewest successes up to 400, and then it will treat them all as random
 
-        let ret_vals = [];
+            db.gameModel.find({}, function(err, games) {
+                if(err) {
+                    console.log('Error sending : ' + err);
+                    res.status(400).send('unable to access database');
+                } else {
 
-        db.gameModel.find({}, function(err, games) {
-            if(err) {
-                console.log('Error sending : ' + err);
-                res.status(400).send('unable to access database');
-            } else {
-
-                for (i in games) {
-                    //for use with full audio_file list!!
-                    if (games[i]['vPercent'] > 0.6 && games[i]['falsePositives'] < 0.4){
-                        if (typeof(games[i]['tLocation'][0]) == 'number'){ //old version with single target
-                            let filename = games[i]['fileList'][games[i]['tLocation'][0]];
-                            dict[filename] += 1;
-                        } else {//new version with array of targets
-                            for (i2 in games[i]['tLocation']){
-                                let filename = games[i]['fileList'][games[i]['tLocation'][i2][0]];
-                                dict[filename] += 1;
-                            }
-                        }
+                    let dict = {};
+                    for (f in AUDIO_FILES){
+                        dict[AUDIO_FILES[f]] = 0;
                     }
 
-                    //for use with smaller subset audio_file list
-                    /*
-                    if (games[i]['vPercent'] > 0.6 && games[i]['falsePositives'] < 0.4){
-                        if (typeof(games[i]['tLocation'][0]) == 'number'){ //old version with single target
-                            let filename = games[i]['fileList'][games[i]['tLocation'][0]];
-                            if AUDIO_FILES.includes(filename){
+                    let rev_dict = new Array(400).fill().map(()=>[]); // this number is the number of responses we track, so it will keep things even and only use the samples with the fewest successes up to 400, and then it will treat them all as random
+
+
+                    for (i in games) {
+                        //for use with full audio_file list!!
+                        if (games[i]['vPercent'] > 0.6 && games[i]['falsePositives'] < 0.4){
+                            if (typeof(games[i]['tLocation'][0]) == 'number'){ //old version with single target
+                                let filename = games[i]['fileList'][games[i]['tLocation'][0]];
                                 dict[filename] += 1;
-                            }
-                        } else {//new version with array of targets
-                            for (i2 in games[i]['tLocation']){
-                                let filename = games[i]['fileList'][games[i]['tLocation'][i2][0]];
-                                if AUDIO_FILES.includes(filename){
+                            } else {//new version with array of targets
+                                for (i2 in games[i]['tLocation']){
+                                    let filename = games[i]['fileList'][games[i]['tLocation'][i2][0]];
                                     dict[filename] += 1;
                                 }
                             }
                         }
+
+                        //for use with smaller subset audio_file list
+                        /*
+                        if (games[i]['vPercent'] > 0.6 && games[i]['falsePositives'] < 0.4){
+                            if (typeof(games[i]['tLocation'][0]) == 'number'){ //old version with single target
+                                let filename = games[i]['fileList'][games[i]['tLocation'][0]];
+                                if AUDIO_FILES.includes(filename){
+                                    dict[filename] += 1;
+                                }
+                            } else {//new version with array of targets
+                                for (i2 in games[i]['tLocation']){
+                                    let filename = games[i]['fileList'][games[i]['tLocation'][i2][0]];
+                                    if AUDIO_FILES.includes(filename){
+                                        dict[filename] += 1;
+                                    }
+                                }
+                            }
+                        }
+                        */
+
                     }
-                    */
+                    for (i in dict){
 
-                }
-                for (i in dict){
+                        if (dict[i] < rev_dict.length){
+                            rev_dict[dict[i]].push(i);
+                        } else {
+                            rev_dict[rev_dict.length - 1].push(i);
+                        }
 
-                    if (dict[i] < rev_dict.length){
-                        rev_dict[dict[i]].push(i);
-                    } else {
-                        rev_dict[rev_dict.length - 1].push(i);
                     }
 
+                    let pool_vals = [];
+                    let curr_index = 0;
+                    for (i=0; i < NUM_RESPONSE*2; i++){
+                        while (rev_dict[curr_index].length == 0){
+                            curr_index = curr_index + 1;
+                        }
+                            pool_vals.push(rev_dict[curr_index].splice(Math.floor(Math.random()*rev_dict[curr_index].length), 1));
+                    }
+
+                    least_used_pool = pool_vals.slice();
+                    processing_flag = false;
                 }
+            });
 
-                global_rev_dict = Object.assign({},rev_dict);
-            }
-        });
-
-        let curr_index = 0;
-        for (i=0; i < NUM_RESPONSE; i++){
-            while (global_rev_dict[curr_index].length == 0){
-                curr_index = curr_index + 1;
-            }
-                ret_vals.push(global_rev_dict[curr_index].splice(Math.random()*global_rev_dict[curr_index].length, 1));
         }
+        
 
-        res.send(ret_vals);
+        //select the lowest 2*NUM_RESPONSE values, then select randomly from those
+        try {
+
+            let ret_vals = least_used_pool.sort(() => .5 - Math.random()).slice(0,NUM_RESPONSE);
+            res.send(ret_vals);
+        } catch(e) {
+            console.log('failed');
+            console.log(e);
+
+            let ret_vals = AUDIO_FILES.sort(() => .5 - Math.random()).slice(0,NUM_RESPONSE);
+            res.send(ret_vals);
+        }
     });
 
     app.get('/memtest-mt-identifier', (req, res) => {
